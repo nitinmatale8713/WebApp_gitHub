@@ -7,10 +7,16 @@ namespace SqlApp.Service
 {
     public class EmployeeService : IEmployee
     {
-        private string db_dataSource = "dabaseserver.database.windows.net";
-        private string db_userId = "sqladmin";
-        private string db_password = "Pass@1387";
-        private string db_database = "appdb";
+        private readonly IConfiguration _configuration;
+        public EmployeeService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+        //private string db_dataSource = "dabaseserver.database.windows.net";
+        //private string db_userId = "sqladmin";
+        //private string db_password = "Pass@1387";
+        //private string db_database = "appdb";
         public List<Employee> GetEmployees()
         {
             SqlConnection sqlCon = GetConnection();
@@ -18,7 +24,7 @@ namespace SqlApp.Service
             string query = "select * from Employee";
             sqlCon.Open();
 
-            SqlCommand cmd = new SqlCommand(query,sqlCon);
+            SqlCommand cmd = new SqlCommand(query, sqlCon);
 
             SqlDataReader reader = cmd.ExecuteReader();
 
@@ -37,12 +43,13 @@ namespace SqlApp.Service
         }
         private SqlConnection GetConnection()
         {
-            var _builder = new SqlConnectionStringBuilder();
-            _builder.DataSource = db_dataSource;
-            _builder.UserID = db_userId;
-            _builder.Password = db_password;
-            _builder.InitialCatalog=db_database;
-            return new SqlConnection(_builder.ConnectionString);
+            //var _builder = new SqlConnectionStringBuilder();
+            //_builder.DataSource = db_dataSource;
+            //_builder.UserID = db_userId;
+            //_builder.Password = db_password;
+            //_builder.InitialCatalog=db_database;
+            //return new SqlConnection(_builder.ConnectionString);
+            return new SqlConnection(_configuration.GetConnectionString("SqlConnection"));
         }
 
     }
